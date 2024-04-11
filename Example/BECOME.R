@@ -5,11 +5,11 @@ library(clinfun)
 library(survival)
 #devtools::install_github("RichJJackson/psc")
 library(psc)
+library(mvtnorm)
 
 
-
+## initial (ish) design
 gsdesign.survival(c(1),haz.ratio=0.65)
-
 
 home <- "/Volumes/richj23/Fellowship/Collaborations/HCC/Intermediate HCC"
 
@@ -18,9 +18,7 @@ setwd(home)
 setwd("Model")
 load("tace_fpm.R")
 
-
 fpm.mod
-
 fpm.extract <- model.extract.fpm(fpm.mod)
 
 
@@ -33,8 +31,6 @@ plot(t,s_t$S,typ="l")
 
 
 ### simulating data from model
-
-
 beta <- 0
 time<-seq(0,60,length=1000)+1e-6
 
@@ -46,8 +42,17 @@ plot(survfit(s.ob~1))
 lines(t,s_t$S,typ="l")
 
 
-
 ### Creating dataset for PSC (this should get added into future sim functions)
+data.mn <- fpm.mod$datameans
+mn.nm <- names(data.mn)
+sim.mn <- t(matrix(rep(data.mn,N),ncol=N))
+sim.data <- data.frame(sim.mn,simdat)
+names(sim.data)<- c(mn.nm,"time","cen")
+
+
+res <- psc(fpm.mod,sim.data)
+
+res[,(ncol(res)-1)]
 
 
 
@@ -71,29 +76,7 @@ lines(t,s_t$S,typ="l")
 
 
 
-### Likelihood Function
-surv.fpm <- function(beta=0,model.extract,time){
 
-  lam <- model.extract$lam
-  kn <- model.extract$kn
-  cov_co <- model.extract$cov.co
-  haz_co <- model.extract$haz_co
-  logt <- log(time)
-  k <- model.extract$k
 
-  z <- NULL
-  ### basis functions
-  for(i in 1:k){
-    zt <- modp(logt-kn[(i+1)])^3 - lam[(i+1)]*modp(logt-kn[1])^3 - (1-lam[(i+1)])*modp(logt-kn[length(kn)])^3
-    z <- cbind(z,zt)
-  }
-
-  H0 <- exp(haz_co[1]+ haz_co[2]*logt+z%*%haz_co[3:(2+k)])
-  H<- H0*exp(beta)
-  S <- exp(-H)
-
-  data.frame("time"=time,"S"=S)
-
-}
 
 
