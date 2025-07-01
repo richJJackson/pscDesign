@@ -1,7 +1,5 @@
 
-CFM
-psc::surv_fpm
-maxTime <- 24
+
 ### Likelihood Function
 fpmSurv <- function(CFM,beta=NULL,lp=NULL,maxTime=24){
 

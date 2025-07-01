@@ -9,11 +9,6 @@
 #pscSim.flexsurvreg(CFM,n0=0,n1,fu)
 
 
-CFM <- smod
-n0 <- 25
-n1 <- 100
-maxTime <- 48
-beta <- -0.5
 
 dataSim.flexsurvreg <- function(CFM,n0=0,n1=100,beta=0,maxTime){
 
@@ -39,6 +34,7 @@ dataSim.flexsurvreg <- function(CFM,n0=0,n1=100,beta=0,maxTime){
 
   ### Personalised survival estimates
   perS <- exp(-Hest$H%*%t(exp(lp)))
+  r_s <- runif(n)
 
   #### Getting urvival times
   cond <- data.frame(t(t(perS)-r_s))

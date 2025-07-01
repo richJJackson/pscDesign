@@ -2,14 +2,11 @@
 
 
 ### Example
-install.packages("psc")
-library(psc)
-smod <- psc::gemCFM
-covSim(smod)[1:3,]
+#install.packages("psc")
+#library(psc)
+#smod <- psc::gemCFM
+#covSim(smod)[1:3,]
 
-
-###
-n<-100
 covSim <- function(CFM,n=100){
 
   dv <- CFM$datavis
