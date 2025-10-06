@@ -19,6 +19,9 @@ pscDesign.flexsurvreg <- function(CFM,n0,n1,recTime,fuTime,beta,rec=NULL,nsim=50
     trialSamp.flexsurvreg(CFM=CFM,n0=n0,n1=n1,rec=rec,beta=beta,recTime=recTime,
                           fuTime=fuTime,nsim.psc=nsim.psc)})
 
+
+  ts <- Reduce("rbind",trialSim)
+
   ## Esimate proportion of posterior distribution > (<) bound
   trialEval <- lapply(trialSim,function(x){
     mn <- x$post_mn
@@ -33,6 +36,7 @@ pscDesign.flexsurvreg <- function(CFM,n0,n1,recTime,fuTime,beta,rec=NULL,nsim=50
 
   ###
   estimate <- data.frame(alpha_eval,pwrEst)
-  estimate
+  ret <- list("Rec"=rec,"avEvent"=mean(ts$ne),"avBeta"=mean(ts$post_mn),
+              "avSd"=mean(ts$post_sd),"Power_est"=estimate,ts=ts)
 
 }

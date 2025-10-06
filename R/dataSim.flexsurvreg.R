@@ -9,11 +9,26 @@
 #pscSim.flexsurvreg(CFM,n0=0,n1,fu)
 
 
-
-dataSim.flexsurvreg <- function(CFM,n0=0,n1=100,beta=0,maxTime){
+dataSim.flexsurvreg <- function(CFM,n0=0,n1=100,beta=0,recTime,fuTime,rec=NULL){
 
   # simualte covariate data
-  n <- n0 + n1
+  maxTime <- recTime+fuTime
+
+  ### Getting total number of recruitment
+  ### if no rec forecast this is the sum of n0 and n1
+  ### if recruitment forecast is set - this is the recruitment max
+  if(is.null(rec)){
+    n <- n0 + n1
+    cumRec <- round(seq(0,n,length=recTime))
+    mnthRec <- c(0,diff(cumRec))
+    rec <- data.frame("SitesOpen"=1,"Monthly.Rec"=mnthRec,"Cumualtive.Rec."=cumRec)
+  }
+
+  if(!is.null(rec)){
+    n <- max(rec$Cumualtive.Rec.)
+  }
+
+  ### Simulate covariates from the CFM
   sim_cov <- covSim(CFM,n=n)
 
   ### linear predictor
@@ -22,11 +37,10 @@ dataSim.flexsurvreg <- function(CFM,n0=0,n1=100,beta=0,maxTime){
   lp <- t(co%*%t(mm))
 
   ### adding in the allocation
-  alloc <- rep(1,n);alloc
-  if(n0>0){
-    alloc <- c(rep(0,n0),rep(1,n1))
-  }
+  alloc.prop <- n1/(n1+n0)
+  alloc <- rbinom(n,alloc.prop,1)
 
+  ## adjusted linear predictor
   lp <- lp + alloc*beta
 
   ### Getting cumulative hazard
@@ -36,20 +50,28 @@ dataSim.flexsurvreg <- function(CFM,n0=0,n1=100,beta=0,maxTime){
   perS <- exp(-Hest$H%*%t(exp(lp)))
   r_s <- runif(n)
 
-  #### Getting urvival times
+  #### Getting survival times
   cond <- data.frame(t(t(perS)-r_s))
   lap <- lapply(cond,FUN=function(x) max(which(x>0)))
   r_t <- Hest$time[unlist(lap)]
 
   ### detailing censoring (administrative censoring on time=maxTime)
   r_c <- rep(1,n)
-  r_c[which(r_t==maxTime)] <- 0
+  fut_rec <- fuTime+nrow(rec):1
+  fut_rec
+
+  cen_tm <- rep(fut_rec,rec$Monthly.Rec)
+  cen.id <- which(r_t>=cen_tm);cen.id
+
+  r_t[cen.id] <- cen_tm[cen.id]
+  r_c[cen.id] <- 0
 
   ### returning results
   sim_cov$lp <- lp
   sim_cov$arm <- alloc
   sim_cov$time <- r_t
   sim_cov$cen <- r_c
+
   sim_cov
 
 }
