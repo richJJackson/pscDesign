@@ -1,5 +1,23 @@
-
-
+#' Generate a survival function from a flexible parametric model
+#'
+#' A function to estimate the survival function based on parameter estimates.
+#'
+#' @param CFM a Counter-Factual model
+#' @param beta parameter with which to adjust the baseline function (defaults to
+#' beta=0)
+#' @param lp a linear predictor which if supplies will be used to adjust the
+#' parameters of the survival function
+#' @param maxTime maximum time used in the estimation
+#'
+#' @details
+#' This functions extracts the baseline (cumulative) hazard parameters from a
+#' counter factual model and uses these to construct survival estimates.  This
+#' is used in the simulation of datasets.  If a (log) hazard ratio, beta, or a
+#' linear predictor, lp, are supplied - these will be used to adjust the
+#' baseline estimates.
+#'
+#' @return A survival function
+#'
 ### Likelihood Function
 fpmSurv <- function(CFM,beta=NULL,lp=NULL,maxTime=24){
 

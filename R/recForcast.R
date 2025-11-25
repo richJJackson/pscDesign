@@ -1,7 +1,25 @@
-### Function for estimating the recruitment rate of a future trial
-
-
-rec.forcast <- function(N.site,rpm,open.rate,Max.Time,penal=0.5,plot=TRUE,...){
+### A function for estimating the recruitment rates
+#'
+#' Estimating recruitment rates based on the number of sites and average site
+#' recruitment rates.
+#'
+#' @param N.site The number of recruiting sites
+#' @param rpm The average recruitment per site per month
+#' @param openRate the rate at which sites are expected to open to recruitment
+#' @param Max.Time maximum time used in the estimation
+#' @param penal A penalising factor for the recruitment in the intial month for
+#' each site (defaults to penal=0.5)
+#' @param plot shoud results be plotted?
+#'
+#' @details
+#' This functions estimates monthly recruitment rates based on the number of
+#' sites and the average monthly recruitment rate.  The resulting dataset can be
+#' passed to pscDesign to improve estimation of design parameters.
+#'
+#' @return A dataset giving the monthly recruitment rate
+#' @export
+#'
+recForcast <- function(N.site,rpm,open.rate,Max.Time,penal=0.5,plot=TRUE,...){
 
 
 ## Getting the number of open sites per month

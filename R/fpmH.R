@@ -1,5 +1,17 @@
+#' Generate a cumulative hazard function from a flexible parametric model
+#'
+#' A function to estimate the survival function based on parameter estimates.
+#'
+#' @param CFM a Counter-Factual model
 
-
+#' @param maxTime maximum time used in the estimation
+#'
+#' @details
+#' This functions extracts the baseline (cumulative) hazard parameters from a
+#' counter factual model.  This is used in the simulation of datasets.
+#'
+#' @return A cumulative Hazard function
+#'
 ### Likelihood Function
 fpmH <- function(CFM,maxTime=24){
 

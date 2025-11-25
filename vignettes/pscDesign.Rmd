@@ -1,0 +1,189 @@
+---
+title: "pscDesign"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{pscDesign}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+setwd("~/Documents/GitHub/pscDesign")
+devtools::load_all()
+#library(pscDesign)
+library(psc)
+```
+
+#  pscDesign: A tool for Synthetically Controlled Trials
+
+pscDesign is a package which allows the design of prospective studies/trials 
+using Personalised Synthetic Controls.
+
+The purpose of a fully synthetic trial is to recruit only patients to an 
+experimental arm.  Personalised synthetic controls here allow a patients 
+observed response to be compared against their model estimated control.
+Details can be found here ("https://richjjackson.github.io/mecPortal/").  
+
+We present an example based in Pancreatic Ductal Adenocarcinoma using a Counter 
+Factual Model (CFM) generated on patients receivign Gemcitabine therapy.
+Full details on the model setting, construction, validation and interpretation 
+are found [here](https://richjjackson.github.io/mecPortal//models/gem.html)
+
+## Trial Design
+
+The overall design uses a Bayesian approach and uses a simulation 
+study to estimate the study parameters.  Evaluations of efficacy are based on 
+the posterior distribution comparing the experimental regimen against the 
+synthetically generated controls.
+
+Trial design also dependes on the ability to recruit patients, in this example 
+we assume a study with 4 sites recruiting at an average rate of 0.88 
+patients/site/month and sites opening to recruitment at a rate of 1 per month.  
+The pscDesign package includes a function [recForcast()] which allows for 
+monthly recruitment estimates.
+
+## 'Traditional' design comparisons
+
+As an illustration, we initially examine traditional randomised phase II trial 
+designsetting a HR = 0.7, using an alpha level of 0.1 and power of 90%
+
+### Randomised pahse II study design
+
+```
+gsdesign.survival(c(1),haz.ratio=0.7,r=1,sig.level=0.1,power=0.9,alternative="one.sided")
+
+ Group sequential design for comparing survival data with hazard ratio = 0.7 
+   Treatment allocated at 1:1 (C:E) ratio 
+   power family of boundary; 0 (Pocock) to 0.5 (O'Brien-Fleming) 
+
+ total number of events = 206.56 
+   information fraction = 1 
+      efficacy boundary = 1.282 (power = 0.5) 
+              sig.level = 0.1 
+                  power = 0.9 
+            alternative = one.sided 
+```
+
+
+## Syntheticall Controlled Trial Design
+
+We now walk through the steps required to use the pscDesign function. To do this
+we make use of the gemCFM data
+ 
+
+```{r, loadData}
+#psc::gemCFM
+load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
+```
+
+
+Before using the pscDesign() function to perform the simulation study, we first 
+ensure the CFM is compatible by simulating a single dataset using the dataSim() 
+function
+
+
+```{r, singleFit}
+simData <- dataSim(gemCFM,n0=0,n1=500,beta=log(0.5),fuTime=12,recTime=24)
+psc.ex <- pscfit(gemCFM,simData)
+```
+
+We can evaluate the fit of this example using the summary and plot() functions
+
+
+```{r, singleFitSumm}
+summary(psc.ex)
+plot(psc.ex)
+```
+
+
+### Single Arm Trial Design
+
+We first demonstrate the impact of a single arm trial design.  We design the 
+study in 2-steps.  Initially we provide a estimated monthly recruitment rate. 
+
+
+#### recruitment forecast
+This is based on 4 sites recruiting at an average rate of 0.88 patients/site/month.  
+Sites will themselves open at a rate of 1 site/month and a maximum recruitment
+time of 24 months is set.  This gives a total sample size of 70 patients.
+
+```{r, singleArmRec}
+N.site <- 4
+rpm <- 0.88
+open.rate <- 1
+recTime <- 24
+recF <- recForcast(N.site,rpm,open.rate,Max.Time=recTime)  
+```
+
+
+#### Power estimates
+
+We run the pscDesign function using the 'rec=recF' option to include these 
+recruitment estimates.  Other parameters show we are interested in a ningle arm 
+study (n=0) looking for a HR = 0.7 (beta=log(0.7)).  We allow for a follow-up 
+period of 12 months and in this example use only 10 simulations (you will want 
+more but we keep this small to keep the processing speed down).  We limit the 
+pscfit function to use 750 MCMC iteration and allow the first 250 to act as a 
+burn in.
+
+```{r, singleArm,echo=T,results='hide'}
+pscDes_singArm <- pscDesign(CFM=gemCFM,n0=0,n1=70,beta=log(0.7),rec=recF,
+                                fuTime=12,nsim=10,nsim.psc=750,burn.psc=250,
+                                bound=0,direction="greater",
+                                alpha_eval=c(0.05,0.1,0.15,0.2))
+```
+
+We view the results below showing the esitmated number of events, posterior mean
+and posterior standard deviation.  Also given are the power estiamtes for a 
+range of alpha levels.
+
+```{r, singleArmRes}
+pscDes_singArm
+```
+
+
+### Randomised Trial Design
+
+In a randomised trial design we extend the example to allow 30 patients onto the 
+control arm as well as 70 on the experimental.
+
+#### recruitment forecast
+
+Given the extra patients required we extend recruitment by a period of 6 months.
+
+```{r, randRec}
+N.site <- 4
+rpm <- 0.88
+open.rate <- 1
+recTime <- 30
+recF <- recForcast(N.site,rpm,open.rate,Max.Time=recTime)  #100 patients over 30 months
+```
+
+We ammend the pscDesign() function allowing for control patients (n=30)
+
+```{r, randArm,echo=T,results='hide'}
+pscDes_rand <- pscDesign(CFM=gemCFM,n0=30,n1=70,beta=log(0.7),rec=recF,
+                                fuTime=12,nsim=5,nsim.psc=750,burn.psc=250,
+                                bound=0,direction="greater",
+                                alpha_eval=c(0.05,0.1,0.15,0.2))
+```
+
+The results of the design given below now include estimates of the efficacy 
+parameter using Personalised Synthetic Controls, Direct Estimation (e.g. using 
+only the information in the trial) and the 'posterior' estimate which combines 
+these two efficacy estimates
+
+```{r, randArmRes}
+pscDes_rand
+```
+
+
+
+

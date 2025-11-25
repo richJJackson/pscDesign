@@ -1,12 +1,16 @@
-## Data Sim - Function for simulating data from cfm object
-
-
-### Example
-#install.packages("psc")
-#library(psc)
-#smod <- psc::gemCFM
-#covSim(smod)[1:3,]
-
+#' Simulate covariates from a Counter factual model
+#'
+#' A function to simulate covariate values from a Counter Factual Model
+#'
+#' @param CFM a Counter-Factual model
+#' @param n number of observation
+#'
+#' @details
+#' This functions extracts the covariates form a counter factual model and
+#' samples from them in order to create a simulated dataset.
+#'
+#' @return A cumulative Hazard function
+#'
 covSim <- function(CFM,n=100){
 
   dv <- CFM$datavis
