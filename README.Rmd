@@ -1,0 +1,155 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# pscDesign
+
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/pscDesign)](https://CRAN.R-project.org/package=pscDesign)
+[![R-CMD-check](https://github.com/richJJackson/pscDesign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/richJJackson/pscDesign/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+The pscDesign packaged is developted to aid in the design of clinical trials 
+using personalised synthetic controls
+
+## Installation
+
+You can install the development version of pscDesign from [GitHub](https://github.com/richjjackson/pscDesign) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("richJJackson/pscDesign")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(pscDesign)
+```
+
+## Syntheticall Controlled Trial Design
+
+We now walk through the steps required to use the pscDesign function. To do this
+we make use of the gemCFM data
+ 
+
+```{r, loadData}
+library(pscDesign)
+gemCFM <- pscDesign::gemCFM
+#load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
+```
+
+
+Before using the pscDesign() function to perform the simulation study, we first 
+ensure the CFM is compatible by simulating a single dataset using the dataSim() 
+function
+
+
+```{r, singleFit}
+simData <- dataSim(gemCFM,n0=0,n1=500,beta=log(0.5),fuTime=12,recTime=24)
+psc.ex <- pscfit(gemCFM,simData)
+```
+
+We can evaluate the fit of this example using the summary and plot() functions
+
+
+```{r, singleFitSumm}
+summary(psc.ex)
+plot(psc.ex)
+```
+
+
+### Single Arm Trial Design
+
+We first demonstrate the impact of a single arm trial design.  We design the 
+study in 2-steps.  Initially we provide a estimated monthly recruitment rate. 
+
+
+#### recruitment forecast
+This is based on 4 sites recruiting at an average rate of 0.88 patients/site/month.  
+Sites will themselves open at a rate of 1 site/month and a maximum recruitment
+time of 24 months is set.  This gives a total sample size of 70 patients.
+
+```{r, singleArmRec}
+N.site <- 4
+rpm <- 0.88
+open.rate <- 1
+recTime <- 24
+recF <- recForcast(N.site,rpm,open.rate,Max.Time=recTime)  
+```
+
+
+#### Power estimates
+
+We run the pscDesign function using the 'rec=recF' option to include these 
+recruitment estimates.  Other parameters show we are interested in a ningle arm 
+study (n=0) looking for a HR = 0.7 (beta=log(0.7)).  We allow for a follow-up 
+period of 12 months and in this example use only 10 simulations (you will want 
+more but we keep this small to keep the processing speed down).  We limit the 
+pscfit function to use 750 MCMC iteration and allow the first 250 to act as a 
+burn in.
+
+```{r, singleArm,echo=T,results='hide'}
+pscDes_singArm <- pscDesign(CFM=gemCFM,n0=0,n1=70,beta=log(0.7),rec=recF,
+                                fuTime=12,nsim=10,nsim.psc=750,burn.psc=250,
+                                bound=0,direction="greater",
+                                alpha_eval=c(0.05,0.1,0.15,0.2))
+```
+
+We view the results below showing the esitmated number of events, posterior mean
+and posterior standard deviation.  Also given are the power estiamtes for a 
+range of alpha levels.
+
+```{r, singleArmRes}
+pscDes_singArm
+```
+
+
+### Randomised Trial Design
+
+In a randomised trial design we extend the example to allow 30 patients onto the 
+control arm as well as 70 on the experimental.
+
+#### recruitment forecast
+
+Given the extra patients required we extend recruitment by a period of 6 months.
+
+```{r, randRec}
+N.site <- 4
+rpm <- 0.88
+open.rate <- 1
+recTime <- 30
+recF <- recForcast(N.site,rpm,open.rate,Max.Time=recTime)  #100 patients over 30 months
+```
+
+We ammend the pscDesign() function allowing for control patients (n=30)
+
+```{r, randArm,echo=T,results='hide'}
+pscDes_rand <- pscDesign(CFM=gemCFM,n0=30,n1=70,beta=log(0.7),rec=recF,
+                                fuTime=12,nsim=5,nsim.psc=750,burn.psc=250,
+                                bound=0,direction="greater",
+                                alpha_eval=c(0.05,0.1,0.15,0.2))
+```
+
+The results of the design given below now include estimates of the efficacy 
+parameter using Personalised Synthetic Controls, Direct Estimation (e.g. using 
+only the information in the trial) and the 'posterior' estimate which combines 
+these two efficacy estimates
+
+```{r, randArmRes}
+pscDes_rand
+```
+

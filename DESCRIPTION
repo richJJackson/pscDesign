@@ -7,7 +7,7 @@ Authors@R: c(
     role = c("cre", "aut","cph"),
     comment = c(ORCID = "0000-0002-7814-5088")))
 Maintainer: Richard Jackson <richJ23@liverpool.ac.uk>
-Description: This package allows the design of prospective studies using 
+Description: Tools for the design of prospective studies using 
     Personalised Synthetic Controls.  Can be used in either single arm or 
     randomised studies.
 License: GPL-3
