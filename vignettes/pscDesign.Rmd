@@ -31,7 +31,7 @@ Details can be found here ("https://richjjackson.github.io/mecPortal/").
 We present an example based in Pancreatic Ductal Adenocarcinoma using a Counter 
 Factual Model (CFM) generated on patients receivign Gemcitabine therapy.
 Full details on the model setting, construction, validation and interpretation 
-are found [here](https://richjjackson.github.io/mecPortal//models/gem.html)
+are found [here](https://richjjackson.github.io/mecPortal//models/pdac_gem.html)
 
 ## Trial Design
 
