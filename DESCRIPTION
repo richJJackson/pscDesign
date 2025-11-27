@@ -21,3 +21,5 @@ Depends:
 Suggests: 
     knitr
 VignetteBuilder: knitr
+URL: https://github.com/richJJackson/pscDesign
+BugReports: https://github.com/richJJackson/pscDesign/issues
