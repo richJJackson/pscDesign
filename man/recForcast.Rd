@@ -12,6 +12,8 @@ recForcast(N.site, rpm, open.rate, Max.Time, penal = 0.5, plot = TRUE, ...)
 
 \item{rpm}{The average recruitment per site per month}
 
+\item{open.rate}{the rate at which sites are expected to open to recruitment}
+
 \item{Max.Time}{maximum time used in the estimation}
 
 \item{penal}{A penalising factor for the recruitment in the intial month for
@@ -19,7 +21,7 @@ each site (defaults to penal=0.5)}
 
 \item{plot}{shoud results be plotted?}
 
-\item{openRate}{the rate at which sites are expected to open to recruitment}
+\item{...}{aditional arguments passed to plot}
 }
 \value{
 A dataset giving the monthly recruitment rate
@@ -32,4 +34,7 @@ recruitment rates.
 This functions estimates monthly recruitment rates based on the number of
 sites and the average monthly recruitment rate.  The resulting dataset can be
 passed to pscDesign to improve estimation of design parameters.
+}
+\examples{
+recForcast(N.site=5,rpm=1,open.rate=1,Max.Time=12)
 }

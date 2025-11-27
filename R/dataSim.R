@@ -23,11 +23,12 @@
 #' @returns A data frame intended for use with the CFM including covariate and
 #' outcome data
 #' @export
-#'
+#' @import stats
 #' @examples
-#' CFM <- pscDesign::gemCFM
-#' dataSim(CFM,n0=10,n1=20,beta=log(0.7),fuTime=12,recTime=12)
+#' gemCFM <- pscDesign::gemCFM
+#' dataSim(gemCFM,n0=10,n1=20,beta=log(0.7),fuTime=12,recTime=12)
 dataSim <- function(CFM,n0=0,n1=100,beta=0,fuTime,recTime,rec=NULL){
+
 
   # simualte covariate data
 

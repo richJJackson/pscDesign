@@ -45,10 +45,10 @@ function. If specified, recTime will be ignored.}
 
 \item{bound}{The bound to use in the posterior evaluation (defaults to 0)}
 
-\item{alpha_eval}{Alpha values at which to evaluate the study design.}
-
-\item{durection}{The direction which specifies superiority of the efficacy
+\item{direction}{The direction which specifies superiority of the efficacy
 parameter}
+
+\item{alpha_eval}{Alpha values at which to evaluate the study design.}
 }
 \value{
 A list containing a summary of the simulated datasets and estimated
@@ -67,6 +67,7 @@ which they are specified in the Counter Factual Model.  One of recTime or rec
 must be specified. If rec is specified, recTime will be ignored.
 }
 \examples{
-CFM <- pscDesign::gemCFM
-pscDesign.flexsurvreg()
+gemCFM <- pscDesign::gemCFM
+pscDesign(gemCFM,n0=0,n1=100,beta=log(0.7),fuTime=12,recTime=12,nsim=2,
+    nsim.psc=300,burn.psc=100)
 }

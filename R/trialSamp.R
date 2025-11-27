@@ -13,9 +13,9 @@
 #' function. If specified, recTime will be ignored.
 #' @param nsim.psc number of simulations to use in psc estimation
 #' @param burn.psc burn in to use in psc estimation
-#'#' @param CFM a Counter-Factual model
-#' @param n0 number of patients allocated to teh control arm (defaults to 0 - i.e. single arm study).
-#' @importFrom pscfit psc
+#' @import stats
+#' @importFrom psc pscfit
+#' @importFrom survival coxph
 #' @returns The number of events as well as estimates of the posterior mean and
 #' standard deviation
 #####pscSim
@@ -30,7 +30,7 @@ trialSamp <- function(CFM,n0,n1,beta,fuTime,recTime,rec,
 
 
     ## fitpsc
-    simfit <- pscfit(CFM,ds,nsim=nsim.psc,burn=burn.psc)
+    simfit <- psc::pscfit(CFM,ds,nsim=nsim.psc,burn=burn.psc)
 
     co <- data.frame(coef(simfit))
     mn <- as.numeric(co$mean)
@@ -54,7 +54,7 @@ trialSamp <- function(CFM,n0,n1,beta,fuTime,recTime,rec,
     ds1 <- ds[ds$arm==1,]
 
     ## fitpsc
-    simfit <- pscfit(CFM,ds1,nsim=nsim.psc)
+    simfit <- psc::pscfit(CFM,ds1,nsim=nsim.psc)
     co <- data.frame(coef(simfit))
     mn_psc <- as.numeric(co$mean)
     sd_psc <- as.numeric(co$sd);sd_psc

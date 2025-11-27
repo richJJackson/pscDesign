@@ -19,7 +19,8 @@ trialSamp(
 \arguments{
 \item{CFM}{a Counter-Factual model}
 
-\item{n0}{number of patients allocated to teh control arm (defaults to 0 - i.e. single arm study).}
+\item{n0}{number of patients allocated to the control arm (defaults to 0 -
+i.e. single arm study).}
 
 \item{n1}{number of patients allocated to the experimental arm}
 

@@ -12,6 +12,9 @@ postEval(mn, sd, bound = 0, direction = "greater")
 \item{sd}{distribution sd}
 
 \item{bound}{The bound to use in the posterior evaluation (defaults to 0)}
+
+\item{direction}{The direction which specifies superiority of the efficacy
+parameter}
 }
 \description{
 postEval evaluated a distribition based on given mean and standard deviation

@@ -3,4 +3,6 @@
 export(dataSim)
 export(pscDesign)
 export(recForcast)
-import(psc)
+import(stats)
+importFrom(psc,pscfit)
+importFrom(survival,coxph)

@@ -5,11 +5,12 @@
 #'
 #' @param N.site The number of recruiting sites
 #' @param rpm The average recruitment per site per month
-#' @param openRate the rate at which sites are expected to open to recruitment
+#' @param open.rate the rate at which sites are expected to open to recruitment
 #' @param Max.Time maximum time used in the estimation
 #' @param penal A penalising factor for the recruitment in the intial month for
 #' each site (defaults to penal=0.5)
 #' @param plot shoud results be plotted?
+#' @param ... aditional arguments passed to plot
 #'
 #' @details
 #' This functions estimates monthly recruitment rates based on the number of
@@ -18,7 +19,8 @@
 #'
 #' @return A dataset giving the monthly recruitment rate
 #' @export
-#'
+#' @examples
+#' recForcast(N.site=5,rpm=1,open.rate=1,Max.Time=12)
 recForcast <- function(N.site,rpm,open.rate,Max.Time,penal=0.5,plot=TRUE,...){
 
 

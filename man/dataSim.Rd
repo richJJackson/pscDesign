@@ -40,6 +40,6 @@ which they are specified in the Counter Factual Model.  One of recTime or rec
 must be specified. If rec is specified, recTime will be ignored.
 }
 \examples{
-CFM <- pscDesign::gemCFM
-dataSim(CFM,n0=10,n1=20,beta=log(0.7),fuTime=12,recTime=12)
+gemCFM <- pscDesign::gemCFM
+dataSim(gemCFM,n0=10,n1=20,beta=log(0.7),fuTime=12,recTime=12)
 }

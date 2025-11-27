@@ -1,8 +1,10 @@
 ---
 title: "pscDesign"
+author: "Richard Jackson"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{pscDesign}
+  %\VignetteIndexEntry{psc-vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -10,15 +12,10 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7,
+  fig.height= 5
 )
-```
-
-```{r setup}
-setwd("~/Documents/GitHub/pscDesign")
-devtools::load_all()
-#library(pscDesign)
-library(psc)
 ```
 
 #  pscDesign: A tool for Synthetically Controlled Trials
@@ -79,8 +76,9 @@ we make use of the gemCFM data
  
 
 ```{r, loadData}
-#psc::gemCFM
-load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
+library(pscDesign)
+gemCFM <- pscDesign::gemCFM
+#load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
 ```
 
 

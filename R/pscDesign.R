@@ -16,7 +16,7 @@
 #' @param nsim.psc number of simulations to use in psc estimation
 #' @param burn.psc burn in to use in psc estimation
 #' @param bound The bound to use in the posterior evaluation (defaults to 0)
-#' @param durection The direction which specifies superiority of the efficacy
+#' @param direction The direction which specifies superiority of the efficacy
 #' parameter
 #' @param alpha_eval Alpha values at which to evaluate the study design.
 #'
@@ -30,10 +30,10 @@
 #'
 #' @returns A list containing a summary of the simulated datasets and estimated
 #' type-II error rates (Power) against leveld of significance (alpha-levels)
-#' @import psc
 #' @examples
-#' CFM <- pscDesign::gemCFM
-#' pscDesign.flexsurvreg()
+#' gemCFM <- pscDesign::gemCFM
+#' pscDesign(gemCFM,n0=0,n1=100,beta=log(0.7),fuTime=12,recTime=12,nsim=2,
+#'     nsim.psc=300,burn.psc=100)
 #' @export
 pscDesign <- function(CFM,n0=0,n1,beta,fuTime,recTime,rec=NULL,
                                   nsim=4,nsim.psc=500,burn.psc=200,bound=0,
