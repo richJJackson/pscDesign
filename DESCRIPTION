@@ -16,8 +16,9 @@ LazyData: true
 RoxygenNote: 7.3.3
 Depends:
     R (>= 4.0.0),
-    psc,
     survival
+Imports:
+    psc (>= 2.0.0)
 Suggests: 
     knitr
 VignetteBuilder: knitr

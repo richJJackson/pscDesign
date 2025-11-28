@@ -15,7 +15,7 @@
 #' @param burn.psc burn in to use in psc estimation
 #' @import stats
 #' @importFrom psc pscfit
-#' @importFrom survival coxph
+#' @importFrom survival coxph Surv
 #' @returns The number of events as well as estimates of the posterior mean and
 #' standard deviation
 #####pscSim

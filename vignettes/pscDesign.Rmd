@@ -71,12 +71,12 @@ gsdesign.survival(c(1),haz.ratio=0.7,r=1,sig.level=0.1,power=0.9,alternative="on
 
 ## Syntheticall Controlled Trial Design
 
-We now walk through the steps required to use the pscDesign function. To do this
-we make use of the gemCFM data
+We now walk through the steps required to use the pscDesign function. To do this we make use of the gemCFM data
  
 
 ```{r, loadData}
 library(pscDesign)
+library(psc)
 gemCFM <- pscDesign::gemCFM
 #load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
 ```
