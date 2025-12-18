@@ -18,7 +18,8 @@ Depends:
     R (>= 4.0.0),
     survival
 Imports:
-    psc (>= 2.0.0)
+    psc (>= 2.0.0),
+    S7
 Suggests: 
     knitr
 VignetteBuilder: knitr
