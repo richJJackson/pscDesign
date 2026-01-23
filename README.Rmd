@@ -49,7 +49,6 @@ we make use of the gemCFM data
 ```{r, loadData}
 library(pscDesign)
 gemCFM <- pscDesign::gemCFM
-#load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
 ```
 
 

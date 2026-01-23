@@ -47,7 +47,6 @@ do this we make use of the gemCFM data
 ``` r
 library(pscDesign)
 gemCFM <- pscDesign::gemCFM
-#load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
 ```
 
 Before using the pscDesign() function to perform the simulation study,
@@ -70,23 +69,23 @@ summary(psc.ex)
 #> 
 #> CFM Formula: 
 #> Surv(time, cen) ~ LymphN + ResecM + Diff_Status + PostOpCA199
-#> <environment: 0x13fb55cb8>
+#> <environment: 0x14242c258>
 #> 
 #> CFM Summary: 
 #> Expected response for the outcome under the CFM:
 #>     S     lo     hi  
-#> 24.00  21.41  27.00  
+#> 24.00  21.55  27.00  
 #> 
 #> Observed outcome from the Data Cohort:
 #>          [,1]
-#> median   NA  
-#> 0.95LCL  NA  
-#> 0.95UCL  NA  
+#> median     NA
+#> 0.95LCL  31.5
+#> 0.95UCL    NA
 #> 
 #> MCMC Fit: 
 #> Posterior Distribution obtaine with fit summary:
 #>       variable     rhat         ess_bulk     ess_tail     mcse_mean  
-#> [1,]  beta_1       1.000078     1222.439     1260.249     0.002611558
+#> [1,]  beta_1       1.001935     1134.741     1165.798     0.002601352
 #> 
 #> Summary: 
 #> Posterior Distribution for beta:Call:
@@ -94,14 +93,14 @@ summary(psc.ex)
 #> 
 #> Coefficients:
 #>            variable    mean        sd          median      q5        
-#> posterior  beta_1      -0.7362122  0.09148957  -0.7346159  -0.8890737
+#> posterior  beta_1      -0.6417877  0.0889299   -0.638817   -0.7826138
 #>            q95       
-#> posterior  -0.5839478
+#> posterior  -0.4991796
 plot(psc.ex)
 #>            variable    mean        sd          median      q5        
-#> posterior  beta_1      -0.7362122  0.09148957  -0.7346159  -0.8890737
+#> posterior  beta_1      -0.6417877  0.0889299   -0.638817   -0.7826138
 #>            q95       
-#> posterior  -0.5839478
+#> posterior  -0.4991796
 #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 #> ℹ Please use `linewidth` instead.
 #> ℹ The deprecated feature was likely used in the ggpubr package.
@@ -164,12 +163,12 @@ power estiamtes for a range of alpha levels.
 pscDes_singArm
 #> [[1]]
 #>         ne    post_mn    post_sd 
-#> 29.8000000 -0.4292838  0.1773080 
+#> 28.2000000 -0.4437137  0.1804213 
 #> 
 #> [[2]]
 #>   alpha_eval pwrEst
-#> 1       0.05    0.9
-#> 2       0.10    0.9
+#> 1       0.05    0.7
+#> 2       0.10    0.7
 #> 3       0.15    0.9
 #> 4       0.20    0.9
 ```
@@ -212,7 +211,7 @@ Estimation (e.g. using only the information in the trial) and the
 pscDes_rand
 #> [[1]]
 #>         ne     mn_psc     sd_psc  mn_direct  sd_direct    post_mn    post_sd 
-#> 42.6000000 -0.5513589  0.1885672 -0.5786859  0.3164008 -0.5630789  0.1614599 
+#> 42.6000000 -0.4956933  0.1955534 -0.5004154  0.3172378 -0.4972258  0.1661216 
 #> 
 #> [[2]]
 #>   alpha_eval pwrEst

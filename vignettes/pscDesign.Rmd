@@ -78,7 +78,6 @@ We now walk through the steps required to use the pscDesign function. To do this
 library(pscDesign)
 library(psc)
 gemCFM <- pscDesign::gemCFM
-#load("~/Documents/GitHub/pscDesign/Data/gemCFM.rda")
 ```
 
 
@@ -90,6 +89,7 @@ function
 ```{r, singleFit}
 simData <- dataSim(gemCFM,n0=0,n1=500,beta=log(0.5),fuTime=12,recTime=24)
 psc.ex <- pscfit(gemCFM,simData)
+
 ```
 
 We can evaluate the fit of this example using the summary and plot() functions

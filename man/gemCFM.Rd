@@ -3,7 +3,7 @@
 \docType{data}
 \name{gemCFM}
 \alias{gemCFM}
-\title{Model for a survival outcome based on Gemcitbine patients from ESPAC-3}
+\title{gemCFM}
 \format{
 A model of class 'pscCFM' containg a 'flexsurvreg' model:
 \describe{
@@ -21,7 +21,8 @@ simulated
 gemCFM
 }
 \description{
-A generated model with a survival endpoint and a cuymulative hazard function
+Model for a survival outcome based on Gemcitbine patients from ESPAC-3. A
+generated model with a survival endpoint and a cuymulative hazard function
 estimated using flexible parametric splines. Data for the model were obtained
 from the ESPAC-3 trials
 }
