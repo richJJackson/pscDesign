@@ -15,7 +15,6 @@ covSim <- function(CFM,n=100){
   dv <- CFM$datavis
 
   cov.nm <- names(dv)
-  attributes(dv)
   ncov <- length(dv)
   xdat <- data.frame("ID"=1:n)
 
@@ -51,6 +50,5 @@ covSim <- function(CFM,n=100){
   xdat
 
 }
-
 
 
