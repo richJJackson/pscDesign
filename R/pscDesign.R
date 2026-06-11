@@ -38,7 +38,8 @@
 pscDesign <- function(CFM,n0=0,n1,beta,fuTime,recTime,rec=NULL,
                                   nsim=4,nsim.psc=500,burn.psc=200,bound=0,
                                   direction="greater",
-                                  alpha_eval=c(0.01,0.025,0.05,0.1,0.15,0.2)){
+                                  alpha_eval=c(0.01,0.025,0.05,0.1,0.15,0.2),
+                                  cen.prop=0.05){
 
   #### Sorting out recruitment estimate
   if(is.null(rec)){
@@ -54,33 +55,21 @@ pscDesign <- function(CFM,n0=0,n1,beta,fuTime,recTime,rec=NULL,
 
 
   ### Simulate Trials
-  trialSim <- lapply(c(1:nsim),function(x){
-    trialSamp(CFM=CFM,n0=n0,n1=n1,beta=beta,fuTime=fuTime,
-                          recTime=recTime,rec=rec,nsim.psc=nsim.psc,
-                          burn.psc=burn.psc)})
+  trialSim <- lapply(1:nsim,function(x){
+    trialSamp(CFM=CFM,beta=beta,n0=n0,n1=n1,fuTime=fuTime,rec=rec,
+              nsim.psc=nsim.psc,burn.psc=burn.psc,cen.prop=cen.prop)})
 
 
+  ### Organise Results
+  l1 <- unlist(lapply(trialSim,mean))
+  l2 <- unlist(lapply(trialSim,sd))
+  l3 <- lapply(trialSim,quantile,p=c(0.025,0.5,0.975))
+  l4 <- unlist(lapply(trialSim,postEval,bound=bound))
 
-  ## Estimate proportion of posterior distribution > (<) bound
-  trialEval <- lapply(trialSim,function(x){
-    mn <- as.numeric(as.character(x$post_mn))
-    sd <- as.numeric(as.character(x$post_sd))
-    postEval(mn,sd,bound=bound,direction=direction)
-  }
-  )
+  ### Return
+  res <- data.frame(cbind(l1,l2,Reduce("rbind",l3),l4))
+  names(res)  <- c("mean","sd","2.5%","50%","97.5%","P>0")
 
-  ## Evaluate bound against alpha level
-  trialAlp <- lapply(trialEval,function(x) as.numeric(x<alpha_eval))
-  pwrEst <- colSums(Reduce(rbind,trialAlp))/nsim
-
-  ###
-  estimate <- data.frame(alpha_eval,pwrEst)
-
-  ### Sumamry of trial parameters
-  trialSumm <- colMeans(Reduce(rbind,trialSim))
-
-  ### Returning object
-  ret <- list(trialSumm,estimate)
-  return(ret)
+  res
 
   }

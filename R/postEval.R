@@ -8,9 +8,6 @@
 #' @param direction The direction which specifies superiority of the efficacy
 #' parameter
 #' @import stats
-postEval <- function(mn,sd,bound=0,direction="greater"){
-  pn <- pnorm(bound,mn,sd)
-  ret <- pn
-  if(direction=="greater") ret <- 1-pn
-  ret
-}
+### Evaluate
+postEval <- function(drs, bound=0){
+  length(which(drs>bound))/length(drs)}

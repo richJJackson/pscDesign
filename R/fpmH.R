@@ -13,10 +13,10 @@
 #' @return A cumulative Hazard function
 #'
 ### Likelihood Function
-fpmH <- function(CFM,maxTime=24){
 
-  time <- seq(1e-16,maxTime,len=1000)
-  logt <- log(time)
+fpmH <- function(CFM,t,lp=0){
+
+  logt <- log(t)
 
   lam <- CFM$lam
   kn <- CFM$kn
@@ -32,6 +32,7 @@ fpmH <- function(CFM,maxTime=24){
   }
 
   H <- exp(haz_co[1]+ haz_co[2]*logt+z%*%haz_co[3:(2+k)])
-  data.frame("time"=time,"H"=H)
+  Had <- H*exp(lp)
+  data.frame("time"=t,"H"=H,"Had"=Had)
 
 }
