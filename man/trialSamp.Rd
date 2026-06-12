@@ -13,7 +13,8 @@ trialSamp(
   recTime,
   rec,
   nsim.psc = 750,
-  burn.psc = 250
+  burn.psc = 250,
+  cen.prop
 )
 }
 \arguments{

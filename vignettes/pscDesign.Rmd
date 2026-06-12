@@ -147,6 +147,46 @@ pscDes_singArm
 ```
 
 
+#### Sample size search
+
+When the required sample size is unknown, [pscSampSiz()] searches for an
+experimental-arm size that achieves a target study power. The function runs a
+series of adaptive simulations: at each step a trial is simulated and declared
+positive when at least `1 - alpha` of the posterior for `beta_1` lies on the
+superiority side of the bound (here, `beta_1 < 0`, corresponding to HR `< 1`).
+The sample size is reduced by 10% after a positive trial and increased by 10%
+after a negative trial. After 20 such iterations (fewer are used below to keep
+the vignette build time manageable), a logistic regression model is fitted and
+used to predict the sample size required for 80% power. The design is then
+re-run at that predicted sample size.
+
+```{r, sampSiz, echo=TRUE, results='hide'}
+set.seed(2024)
+pscSiz <- pscSampSiz(
+  CFM = gemCFM,
+  beta = log(0.7),
+  fuTime = 12,
+  recTime = 12,
+  n_start = 50,
+  power = 0.8,
+  alpha = 0.05,
+  direction = "less",
+  n_iter = 5,
+  nsim.psc = 300,
+  burn.psc = 100
+)
+```
+
+The table below shows the adaptive search history. The predicted sample size
+and the posterior power estimate from the confirmatory run are then displayed.
+
+```{r, sampSizRes}
+pscSiz$search
+pscSiz$n_predicted
+pscSiz$final$power
+```
+
+
 ### Randomised Trial Design
 
 In a randomised trial design we extend the example to allow 30 patients onto the 

@@ -4,14 +4,16 @@
 \alias{postEval}
 \title{A function to evaluate posterior distribution}
 \usage{
-postEval(mn, sd, bound = 0, direction = "greater")
+postEval(drs, bound = 0)
 }
 \arguments{
+\item{drs}{posterior draws for the efficacy parameter}
+
+\item{bound}{The bound to use in the posterior evaluation (defaults to 0)}
+
 \item{mn}{distribution mean}
 
 \item{sd}{distribution sd}
-
-\item{bound}{The bound to use in the posterior evaluation (defaults to 0)}
 
 \item{direction}{The direction which specifies superiority of the efficacy
 parameter}

@@ -30,10 +30,8 @@ trialSamp <- function(CFM,n0,n1,beta,fuTime,recTime,rec,
                   fuTime=fuTime,rec=rec,cen.prop=cen.prop)
 
     ## fitpsc
-    simfit <- psc::pscfit(CFM,ds,nsim=nsim.psc,burn=burn.psc)
-    ret <- simfit$draws$beta_1
-
-    #names(ret) <- c("ne","post_mn","post_sd",names(qu))
+    simfit <- psc::pscfit(CFM, ds, nsim = nsim.psc, burn = burn.psc)
+    ret <- pscBetaDraws(simfit)
   }
 
 
@@ -53,4 +51,21 @@ trialSamp <- function(CFM,n0,n1,beta,fuTime,recTime,rec,
 
   ret
 
+}
+
+pscBetaDraws <- function(simfit) {
+  draws <- simfit$draws
+  if (is.null(draws)) {
+    stop("No posterior draws found in pscfit output.", call. = FALSE)
+  }
+  if (is.array(draws) && length(dim(draws)) == 3L) {
+    return(as.vector(draws[, , "beta_1", drop = TRUE]))
+  }
+  if (is.data.frame(draws) && "beta_1" %in% names(draws)) {
+    return(draws$beta_1)
+  }
+  if (is.list(draws) && !is.null(draws$beta_1)) {
+    return(draws$beta_1)
+  }
+  stop("Unable to extract beta_1 draws from pscfit output.", call. = FALSE)
 }

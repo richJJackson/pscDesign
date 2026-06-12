@@ -4,7 +4,7 @@
 \alias{fpmH}
 \title{Generate a cumulative hazard function from a flexible parametric model}
 \usage{
-fpmH(CFM, maxTime = 24)
+fpmH(CFM, t, lp = 0)
 }
 \arguments{
 \item{CFM}{a Counter-Factual model}

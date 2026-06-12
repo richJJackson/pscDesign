@@ -17,7 +17,8 @@ pscDesign(
   burn.psc = 200,
   bound = 0,
   direction = "greater",
-  alpha_eval = c(0.01, 0.025, 0.05, 0.1, 0.15, 0.2)
+  alpha_eval = c(0.01, 0.025, 0.05, 0.1, 0.15, 0.2),
+  cen.prop = 0.05
 )
 }
 \arguments{
